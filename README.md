@@ -1,8 +1,6 @@
 ### compatible with iOS and Android
 
-| ![android](https://github.com/hashemalkayal/otp-verifications-codess/blob/master/screenshot/OTP1.jpeg) | ![iOS](https://github.com/hashemalkayal/otp-verifications-codess/blob/master/screenshot/OTP2.jpeg) |
-| :----------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------: |
-|                                               on Android                                               |                                               on iOS                                               |
+![SCREENSHOT](https://user-images.githubusercontent.com/73720742/136539014-5b6af012-953e-45b3-87b2-d96bf65efb8a.gif)
 
 ## Installation
 
@@ -27,7 +25,7 @@ import OTPVerificationsCodes from "otp-verifications-codes";
 />
 
 onInputCompleted = (text) => {
-	 // Do what you want to do here
+	 // Do what you want to do here Like axios call or fetch
 }
 ...
 ```
@@ -36,26 +34,26 @@ onInputCompleted = (text) => {
 
 ```javascript
 import OTPVerificationsCodes from "otp-verifications-codes";
-...
 
-    <View style={styles.container}>
-      <View style={styles.simpleModal}>
-        <Text style={{ textAlign: "center", color: "#000" }}>
-          react native OTPVerificationsCodes
-        </Text>
-        <OTPVerificationsCodes
-          ViewWrapperStyle={styles.ViewWrapperStyle}
-          codeInputStyle={styles.inputStyle}
-          focusedBordercolor={"#00FFFF"}
-          borderColor={"black"}
-          warningTitle={"warning"}
-          warningContent={"Please Enter Only Number"}
-          warningButtonText={"ok"}
-          onInputCompleted={(otpCode) => console.log(otpCode)}
-        />
-      </View>
-    </View>
+<View style={styles.container}>
+  <View style={styles.simpleModal}>
+    <Text style={{ textAlign: "center", color: "#000" }}>
+      react native OTPVerificationsCodes
+    </Text>
+    <OTPVerificationsCodes
+      ViewWrapperStyle={styles.ViewWrapperStyle}
+      codeInputStyle={styles.inputStyle}
+      focusedBordercolor={"#00FFFF"}
+      borderColor={"black"}
+      warningTitle={"warning"}
+      warningContent={"Please Enter Number Only"}
+      warningButtonText={"ok"}
+      onInputCompleted={(otpCode) => console.log(otpCode)}
+    />
+  </View>
+</View>;
 
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
@@ -90,6 +88,25 @@ import OTPVerificationsCodes from "otp-verifications-codes";
     flexDirection: "row",
     justifyContent: "space-around",
     paddingVertical: 40,
-  }
-...
+  },
+});
 ```
+
+## **Properties**
+
+|        Prop        | PropType |      Default Value       | isRequired |
+| :----------------: | :------: | :----------------------: | :--------: |
+|  ViewWrapperStyle  |  Object  |          Empty           |    Yes     |
+|   codeInputStyle   |  Object  |          Empty           |    Yes     |
+|    borderColor     |  String  |           #000           |     No     |
+| focusedBordercolor |  String  |         #00FFFF          |     No     |
+|    warningTitle    |  String  |         warning          |     No     |
+|   warningContent   |  String  | Please Enter Number Only |     No     |
+| warningButtonText  |  String  |            Ok            |     No     |
+|     secureText     | Boolean  |          false           |     No     |
+
+## **Methods**
+
+|       Name       | isRequired |                                      Description                                       |
+| :--------------: | :--------: | :------------------------------------------------------------------------------------: |
+| onInputCompleted |    Yes     | When the text in the input box completed, the method is called, and Otp code returned. |

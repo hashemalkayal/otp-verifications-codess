@@ -17,11 +17,11 @@ import { View, TextInput, Alert, Keyboard } from "react-native";
 const OTPVerificationsCodes = ({
   ViewWrapperStyle = {},
   codeInputStyle = {},
-  borderColor = "",
-  focusedBordercolor = "",
-  warningTitle = "",
-  warningContent = "",
-  warningButtonText = "",
+  borderColor = "#000",
+  focusedBordercolor = "#00FFFF",
+  warningTitle = "warning",
+  warningContent = "Please Enter Number Only",
+  warningButtonText = "Ok",
   onInputCompleted,
   secureText = false,
 }) => {
@@ -51,7 +51,7 @@ const OTPVerificationsCodes = ({
   const createAlert = (title, body, buttonText) => {
     Alert.alert(title, body, [
       {
-        text: buttonText || "ok",
+        text: buttonText,
         style: "cancel",
       },
     ]);

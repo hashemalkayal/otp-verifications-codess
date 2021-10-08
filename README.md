@@ -1,4 +1,4 @@
-### compatible with iOS and Android
+## compatible with iOS and Android
 
 ![SCREENSHOT](https://user-images.githubusercontent.com/73720742/136539014-5b6af012-953e-45b3-87b2-d96bf65efb8a.gif)
 
@@ -10,11 +10,11 @@ $ npm i otp-verifications-codes --save
 
 ## Usage
 
-### Basic
+### Basic Usage
 
 Set the callback function when onInputCompleted, you can get the OTP input insert by the user.
 
-## Ex:
+Auto rest input Value onCompleted Acitve Code
 
 ```javascript
 import OTPVerificationsCodes from "otp-verifications-codes";

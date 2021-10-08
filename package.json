@@ -1,4 +1,5 @@
 {
+   "homepage": "https://github.com/hashemalkayal/otp-verifications-codess#readme",
     "keywords": [
         "verifycode",
         "verification code",
@@ -11,7 +12,8 @@
         "code",
         "OTP verifications codes"
       ],
+    "license": "MIT",
     "main": "OTPVerificationsCodes.js",
     "name": "otp-verifications-codes",
-    "version": "1.0.8"
+    "version": "1.0.9"
   }

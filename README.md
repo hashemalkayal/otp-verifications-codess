@@ -1,5 +1,9 @@
 ### compatible with iOS and Android
 
+| ![android](https://github.com/hashemalkayal/otp-verifications-codess/blob/master/screenshot/OTP1.jpeg) | ![iOS](https://github.com/hashemalkayal/otp-verifications-codess/blob/master/screenshot/OTP2.jpeg) |
+| :----------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------: |
+|                                               on Android                                               |                                               on iOS                                               |
+
 ## Installation
 
 ```bash

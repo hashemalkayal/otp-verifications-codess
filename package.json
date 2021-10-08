@@ -1,0 +1,17 @@
+{
+    "keywords": [
+        "verifycode",
+        "verification code",
+        "verifications",
+        "verification",
+        "react-native",
+        "input",
+        "OTP",
+        "verify",
+        "code",
+        "OTP verifications codes"
+      ],
+    "main": "OTPVerificationsCodes.js",
+    "name": "otp-verifications-codes",
+    "version": "1.0.4"
+  }

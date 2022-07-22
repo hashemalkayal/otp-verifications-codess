@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, TextInput, Alert, Keyboard } from "react-native";
+import { View, Alert, Keyboard } from "react-native";
+import TextInputView from "./TextinputView/TextInputView";
 
 /**
  * @componentname OTPVerificationsCodes
@@ -12,6 +13,11 @@ import { View, TextInput, Alert, Keyboard } from "react-native";
  * @prop {String} warningButtonText The warningButtonText for Alert title as while
  * @prop {Function} onInputCompleted A function to be called on Completed input fill
  * @prop {Boolean} secureText The secureText if you need to hide text Enter by user
+ * @prop {Number} inputCount the inputCount how many count input need
+ * @prop {Boolean} showTextCaret the showTextCaret is mean textIndicator inside input
+ * @prop {String} inputkeyboardType the inputkeyboardType value on TextInput keybaordtype
+ * @prop {Number} inputMaxLength the inputMaxLength mean how many value need on one input
+ * @prop {Boolean} restAfterCompleted the restAfterCompleted mean rest allinput value when user entered all value inside input
  */
 
 const OTPVerificationsCodes = ({
@@ -24,29 +30,83 @@ const OTPVerificationsCodes = ({
   warningButtonText = "Ok",
   onInputCompleted,
   secureText = false,
+  inputCount = 4,
+  showTextCaret = false,
+  inputkeyboardType = "number-pad",
+  inputMaxLength = 1,
+  restAfterCompleted = true,
 }) => {
-  const [inputs, setInputs] = useState({
-    firstInputValue: "",
-    secondInputValue: "",
-    thirdInputValue: "",
-    fourthInputValue: "",
-  });
-
-  const firstInpuRef = useRef();
-  const secondInputRef = useRef();
-  const thirdInputRef = useRef();
-  const fourthInputRef = useRef();
+  const [listInput, setListInput] = useState([]);
 
   useEffect(() => {
-    if (!!inputs.fourthInputValue) {
-      if (onCompletedCodeValue()) {
-        const OTPCODE = Object.values(inputs).reduce((a, b) => a + b);
+    if (inputCount) {
+      const createArray = [...new Array(inputCount)].fill({ input: "" });
+      const appendInputValues = createArray.map((_, index) => {
+        return {
+          [`input${index}`]: "",
+        };
+      });
 
-        onInputCompleted(OTPCODE);
-        rest();
+      setListInput(appendInputValues);
+    }
+  }, [inputCount]);
+
+  const inputsRefs = useRef([]);
+
+  const onChanageText = (key, value, changedIndex) => {
+    if (!isNaN(value)) {
+      let tempInputList = [...listInput];
+      let tempInputValue = { ...tempInputList[changedIndex] };
+
+      tempInputValue[key] = value;
+
+      tempInputList[changedIndex] = tempInputValue;
+
+      if (tempInputValue[key] !== "") foucsNextInput(changedIndex);
+
+      setListInput(tempInputList);
+    } else createAlert(warningTitle, warningContent, warningButtonText);
+  };
+
+  const foucsNextInput = (index) => {
+    const nextIndex = index === listInput.length - 1 ? index : index + 1;
+    inputsRefs.current[nextIndex]?.focus();
+  };
+
+  const onBackKeyPress = (index) => {
+    const prevIndex = index === 0 ? 0 : index - 1;
+    inputsRefs.current[prevIndex]?.focus();
+  };
+
+  useEffect(() => {
+    if (listInput.length) {
+      let checkLastIndex = listInput.length - 1;
+      let tempObject = { ...listInput[checkLastIndex] };
+
+      if (tempObject[`input${checkLastIndex}`] !== "") {
+        let OTPCODE = "";
+        for (let index = 0; index < listInput.length; index++) {
+          const element = listInput[index];
+          OTPCODE += String(element[`input${index}`]);
+        }
+
+        if (onInputCompleted) onInputCompleted(OTPCODE);
+        if (restAfterCompleted) restInputs();
       }
     }
-  }, [inputs]);
+  }, [listInput]);
+
+  const restInputs = () => {
+    const newList = listInput.map((item, index) => {
+      return {
+        [`input${index}`]: "",
+      };
+    });
+
+    setListInput(newList);
+    inputsRefs.current[0]?.focus();
+    hideKeyboard();
+  };
 
   const createAlert = (title, body, buttonText) => {
     Alert.alert(title, body, [
@@ -57,142 +117,27 @@ const OTPVerificationsCodes = ({
     ]);
   };
 
-  const OnChange = (text, key, foucsInput, prevFocusInput) => {
-    console.log(text);
-    if (!Boolean(text)) {
-      setInputs({ ...inputs, [key]: "" });
-      reversefocus(prevFocusInput);
-    } else {
-      if (!isNaN(text)) {
-        setInputs({ ...inputs, [key]: text });
-        foucsInput.current.focus();
-      } else createAlert(warningTitle, warningContent, warningButtonText);
-    }
-  };
-
-  const onCompletedCodeValue = () => {
-    for (const key in inputs)
-      if (!!inputs[key]) return true;
-      else return false;
-  };
-
-  const rest = () => {
-    firstInpuRef.current.clear();
-    secondInputRef.current.clear();
-    thirdInputRef.current.clear();
-    fourthInputRef.current.clear();
-
-    setInputs({
-      firstInputValue: "",
-      secondInput: "",
-      thirdInputValue: "",
-      fourthInputValue: "",
-    });
-
-    firstInpuRef.current.focus();
-    hideKeyboard();
-  };
-
-  const reversefocus = (foucsInput) => foucsInput.current.focus();
-
-  const onInputFocus = (prevInputValue, foucsInput) =>
-    !Boolean(prevInputValue) && foucsInput.current.focus();
-
   const hideKeyboard = () => Keyboard.dismiss();
-
-  const onDeleteKeypress = (prevInput) => prevInput.current.focus();
-
-  const borderColorSelected = (foucsInput) =>
-    Boolean(foucsInput?.current?.isFocused())
-      ? focusedBordercolor
-      : borderColor;
 
   return (
     <View style={ViewWrapperStyle}>
-      <TextInput
-        secureTextEntry={secureText}
-        caretHidden={true}
-        onTouchStart={() => {
-          setInputs({ ...inputs, firstInputValue: "" });
-          firstInpuRef.current.focus();
-        }}
-        ref={firstInpuRef}
-        onPressIn={borderColorSelected}
-        maxLength={1}
-        showSoftInputOnFocus={true}
-        keyboardType="number-pad"
-        value={inputs.firstInputValue}
-        onChangeText={(text) =>
-          OnChange(text, "firstInputValue", secondInputRef, firstInpuRef)
-        }
-        style={[
-          codeInputStyle,
-          { borderColor: borderColorSelected(firstInpuRef) },
-        ]}
-      />
-
-      <TextInput
-        secureTextEntry={secureText}
-        caretHidden={true}
-        ref={secondInputRef}
-        maxLength={1}
-        showSoftInputOnFocus={true}
-        onFocus={() => onInputFocus(inputs.firstInputValue, firstInpuRef)}
-        keyboardType="number-pad"
-        value={inputs.secondInputValue}
-        onKeyPress={({ nativeEvent }) => {
-          nativeEvent.key === "Backspace" && onDeleteKeypress(firstInpuRef);
-        }}
-        onChangeText={(text) =>
-          OnChange(text, "secondInputValue", thirdInputRef, firstInpuRef)
-        }
-        style={[
-          codeInputStyle,
-          { borderColor: borderColorSelected(secondInputRef) },
-        ]}
-      />
-
-      <TextInput
-        secureTextEntry={secureText}
-        caretHidden={true}
-        ref={thirdInputRef}
-        maxLength={1}
-        showSoftInputOnFocus={true}
-        onFocus={() => onInputFocus(inputs.secondInputValue, secondInputRef)}
-        keyboardType="number-pad"
-        value={inputs.thirdInputValue}
-        onKeyPress={({ nativeEvent }) => {
-          nativeEvent.key === "Backspace" && onDeleteKeypress(secondInputRef);
-        }}
-        onChangeText={(text) =>
-          OnChange(text, "thirdInputValue", fourthInputRef, secondInputRef)
-        }
-        style={[
-          codeInputStyle,
-          { borderColor: borderColorSelected(thirdInputRef) },
-        ]}
-      />
-
-      <TextInput
-        secureTextEntry={secureText}
-        caretHidden={true}
-        ref={fourthInputRef}
-        maxLength={1}
-        showSoftInputOnFocus={true}
-        onFocus={() => onInputFocus(inputs.thirdInputValue, thirdInputRef)}
-        keyboardType="number-pad"
-        value={inputs.fourthInputValue}
-        onKeyPress={({ nativeEvent }) => {
-          nativeEvent.key === "Backspace" && onDeleteKeypress(thirdInputRef);
-        }}
-        onChangeText={(text) =>
-          OnChange(text, "fourthInputValue", fourthInputRef, thirdInputRef)
-        }
-        style={[
-          codeInputStyle,
-          { borderColor: borderColorSelected(fourthInputRef) },
-        ]}
-      />
+      {listInput.map((inputValue, key) => (
+        <TextInputView
+          key={key}
+          index={key}
+          inputsRefs={inputsRefs}
+          codeInputStyle={codeInputStyle}
+          inputValue={inputValue}
+          inputkeyboardType={inputkeyboardType}
+          inputMaxLength={inputMaxLength}
+          IsSecureText={secureText}
+          onChanageText={onChanageText}
+          onBackKeyPress={onBackKeyPress}
+          focusedBordercolor={focusedBordercolor}
+          borderColor={borderColor}
+          showTextCaret={showTextCaret}
+        />
+      ))}
     </View>
   );
 };

@@ -5,7 +5,9 @@
 ## Installation
 
 ```bash
-$ npm i otp-verifications-codes --save
+$ using (npm) npm i otp-verifications-codes --save
+
+$ using (yarn) yarn add otp-verifications-codes
 ```
 
 ## Usage
@@ -49,6 +51,7 @@ import OTPVerificationsCodes from "otp-verifications-codes";
       warningContent={"Please Enter Number Only"}
       warningButtonText={"ok"}
       onInputCompleted={(otpCode) => console.log(otpCode)}
+      inputCount={4}
     />
   </View>
 </View>;
@@ -103,10 +106,15 @@ const styles = StyleSheet.create({
 |    warningTitle    |  String  |         warning          |     No     |
 |   warningContent   |  String  | Please Enter Number Only |     No     |
 | warningButtonText  |  String  |            Ok            |     No     |
-|     secureText     | Boolean  |          false           |     No     |
+|     inputCount     |  Number  |            4             |     No     |
+|   showTextCaret    | Boolean  |          false           |     No     |
+| inputkeyboardType  |  String  |        number-pad        |     No     |
+|   inputMaxLength   |  Number  |            1             |     No     |
+| restAfterCompleted | Boolean  |           true           |     No     |
 
 ## **Methods**
 
 |       Name       | isRequired |                                      Description                                       |
 | :--------------: | :--------: | :------------------------------------------------------------------------------------: |
 | onInputCompleted |    Yes     | When the text in the input box completed, the method is called, and Otp code returned. |
+|    inputCount    |     No     |                             How you need number of count.                              |
